@@ -21,7 +21,6 @@ export const TaxReturn: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   
-  // Data State
   const [incomeSum, setIncomeSum] = useState<number>(0);
   const [expenseSum, setExpenseSum] = useState<number>(0);
   const [deductionsList, setDeductionsList] = useState<any[]>([]);
@@ -37,30 +36,25 @@ export const TaxReturn: React.FC = () => {
     if (!user) return;
     try {
       setLoading(true);
-      // Fetch Income sum
       const incRes = await api.get('/income');
       const yearIncomes = incRes.data.incomes.filter((i: any) => new Date(i.IncomeDate).getFullYear() === year);
       setIncomeSum(yearIncomes.reduce((sum: number, item: any) => sum + item.Amount, 0));
 
-      // Fetch Expense sum
       const expRes = await api.get('/expenses');
       const yearExpenses = expRes.data.expenses.filter((e: any) => new Date(e.ExpenseDate).getFullYear() === year);
       setExpenseSum(yearExpenses.reduce((sum: number, item: any) => sum + item.Amount, 0));
 
-      // Fetch Deductions & Credits
       const dedRes = await api.get(`/tax/deductions?year=${year}`);
       setDeductionsList(dedRes.data.deductions);
       const credRes = await api.get(`/tax/credits?year=${year}`);
       setCreditsList(credRes.data.credits);
 
-      // Check if tax return already generated
       const retRes = await api.get(`/tax/returns?userId=${user.UserID}`);
       const returns = retRes.data.taxReturns;
       const currentReturn = returns.find((r: any) => r.TaxYear === year);
 
       if (currentReturn) {
         setActiveReturn(currentReturn);
-        // Load filing history
         const histRes = await api.get(`/tax/returns/${currentReturn.ReturnID}`);
         setFilingHistory(histRes.data.history);
       } else {
@@ -83,7 +77,7 @@ export const TaxReturn: React.FC = () => {
       setLoading(true);
       const res = await api.get(`/tax/calculate?year=${year}`);
       setTaxDetails(res.data.calculation);
-      setStep(2); // Advance to rule application and calculation step
+      setStep(2);  
     } catch (err) {
       alert('Tax calculation engine failure.');
     } finally {
@@ -98,11 +92,10 @@ export const TaxReturn: React.FC = () => {
       setActiveReturn(res.data.taxReturn);
       setMessage('Draft tax return generated and stored successfully!');
       
-      // Load history
       const histRes = await api.get(`/tax/returns/${res.data.taxReturn.ReturnID}`);
       setFilingHistory(histRes.data.history);
       
-      setStep(3); // Advance to preview and submit
+      setStep(3);  
     } catch (err) {
       alert('Return generation failure.');
     } finally {
@@ -118,11 +111,10 @@ export const TaxReturn: React.FC = () => {
       setActiveReturn(res.data.taxReturn);
       setMessage('Filing submitted to Tax Authority successfully!');
       
-      // Reload history
       const histRes = await api.get(`/tax/returns/${activeReturn.ReturnID}`);
       setFilingHistory(histRes.data.history);
       
-      setStep(4); // Filing complete
+      setStep(4);  
     } catch (err) {
       alert('Filing submission failed.');
     } finally {
@@ -131,7 +123,6 @@ export const TaxReturn: React.FC = () => {
   };
 
   const handleDownloadPDF = () => {
-    // Print document mock
     window.print();
   };
 

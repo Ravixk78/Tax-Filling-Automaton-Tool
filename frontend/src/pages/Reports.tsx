@@ -11,7 +11,6 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-// Chart.js Setup
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -66,7 +65,6 @@ export const Reports: React.FC = () => {
   const totalExpense = expenses.reduce((sum, e) => sum + e.Amount, 0);
   const netEarnings = totalIncome - totalExpense;
 
-  // Export CSV handler
   const handleExportCSV = () => {
     let csvContent = 'data:text/csv;charset=utf-8,';
     csvContent += 'Type,Source/Description,Amount,Date,Category/IncomeType\n';
@@ -93,7 +91,6 @@ export const Reports: React.FC = () => {
     window.print();
   };
 
-  // Chart setup: Category breakdown for Pie Chart
   const getCategoryBreakdown = () => {
     const breakdown: Record<string, number> = {};
     expenses.forEach(e => {
@@ -112,7 +109,6 @@ export const Reports: React.FC = () => {
     };
   };
 
-  // Chart setup: Income vs Expense Monthly for Bar Chart (Mock Months)
   const getCashFlowData = () => {
     return {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],

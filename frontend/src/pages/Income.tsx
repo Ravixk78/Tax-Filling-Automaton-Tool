@@ -19,12 +19,10 @@ export const Income: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const initialSearch = queryParams.get('search') || '';
 
-  // State
   const [incomes, setIncomes] = useState<any[]>([]);
   const [search, setSearch] = useState<string>(initialSearch);
   const [typeFilter, setTypeFilter] = useState<string>('');
   
-  // Modal state
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [source, setSource] = useState<string>('');
@@ -33,7 +31,6 @@ export const Income: React.FC = () => {
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [description, setDescription] = useState<string>('');
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recordsPerPage = 5;
 
@@ -108,7 +105,6 @@ export const Income: React.FC = () => {
     }
   };
 
-  // Pagination calculation
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = incomes.slice(indexOfFirstRecord, indexOfLastRecord);

@@ -17,13 +17,11 @@ import {
 } from 'lucide-react';
 
 export const Expenses: React.FC = () => {
-  // State
   const [expenses, setExpenses] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
   const [catFilter, setCatFilter] = useState<string>('');
 
-  // CRUD Modals state
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [desc, setDesc] = useState<string>('');
@@ -31,14 +29,12 @@ export const Expenses: React.FC = () => {
   const [categoryId, setCategoryId] = useState<string>('');
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
-  // Upload Receipt state
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
   const [selectedExpenseId, setSelectedExpenseId] = useState<number | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recordsPerPage = 5;
 
@@ -119,7 +115,6 @@ export const Expenses: React.FC = () => {
     }
   };
 
-  // Receipt upload handling
   const handleOpenUpload = (expenseId: number) => {
     setSelectedExpenseId(expenseId);
     setSelectedFile(null);
@@ -171,13 +166,11 @@ export const Expenses: React.FC = () => {
     }
   };
 
-  // Pagination calculation
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = expenses.slice(indexOfFirstRecord, indexOfLastRecord);
   const totalPages = Math.ceil(expenses.length / recordsPerPage) || 1;
 
-  // Find Category Name by ID helper
   const getCategoryName = (catId: number) => {
     const cat = categories.find(c => c.CategoryID === catId);
     return cat ? cat.CategoryName : 'Other';

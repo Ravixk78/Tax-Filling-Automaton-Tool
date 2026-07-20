@@ -8,7 +8,7 @@ export const Register: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Inputs state
+   
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -24,7 +24,7 @@ export const Register: React.FC = () => {
     e.preventDefault();
     setError(null);
 
-    // Validation
+     
     if (!name || !email || !phone || !password || !confirmPassword || !role) {
       setError('Please fill in all required fields.');
       return;
@@ -93,7 +93,7 @@ export const Register: React.FC = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. John Doe"
+              placeholder="e.g. Ravindu Kushan"
               className="h-10 px-4 border border-border rounded-lg text-sm bg-slate-50 focus:outline-none focus:border-primary focus:bg-white transition-all"
               required
             />
@@ -106,7 +106,7 @@ export const Register: React.FC = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="john@example.com"
+              placeholder=" ravindu@example.com"
               className="h-10 px-4 border border-border rounded-lg text-sm bg-slate-50 focus:outline-none focus:border-primary focus:bg-white transition-all font-mono"
               required
             />
@@ -119,7 +119,7 @@ export const Register: React.FC = () => {
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="+1 (555) 000-0000"
+              placeholder="070-123-4567"
               className="h-10 px-4 border border-border rounded-lg text-sm bg-slate-50 focus:outline-none focus:border-primary focus:bg-white transition-all font-mono"
               required
             />

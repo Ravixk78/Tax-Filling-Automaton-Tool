@@ -13,7 +13,7 @@ import {
 
 export const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<any[]>([]);
-  const [filter, setFilter] = useState<string>('All'); // 'All', 'Unread', 'Read'
+  const [filter, setFilter] = useState<string>('All');  
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchNotifications = async () => {
@@ -35,7 +35,6 @@ export const Notifications: React.FC = () => {
   const handleMarkAsRead = async (id: number) => {
     try {
       await api.put(`/notifications/${id}/read`);
-      // Update state locally
       setNotifications(prev => prev.map(n => n.NotificationID === id ? { ...n, Status: 'Read' } : n));
     } catch (err) {
       console.error('Failed to mark read:', err);

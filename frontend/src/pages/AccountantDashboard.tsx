@@ -15,16 +15,13 @@ import {
 } from 'lucide-react';
 
 export const AccountantDashboard: React.FC = () => {
-  // Client Management State
   const [clients, setClients] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
   
-  // Assign client form
   const [clientEmail, setClientEmail] = useState<string>('');
   const [isAssignOpen, setIsAssignOpen] = useState<boolean>(false);
   const [assignError, setAssignError] = useState<string | null>(null);
 
-  // Review states
   const [selectedClient, setSelectedClient] = useState<any>(null);
   const [clientReturns, setClientReturns] = useState<any[]>([]);
   const [isReturnsOpen, setIsReturnsOpen] = useState<boolean>(false);
@@ -100,7 +97,6 @@ export const AccountantDashboard: React.FC = () => {
       });
       setIsReviewOpen(false);
       
-      // Refresh returns view
       const res = await api.get(`/tax/returns?userId=${selectedClient.UserID}`);
       setClientReturns(res.data.taxReturns);
     } catch (err) {
@@ -112,7 +108,6 @@ export const AccountantDashboard: React.FC = () => {
     if (!window.confirm('Submit this return to Tax Authority on client behalf?')) return;
     try {
       await api.post(`/accountant/returns/${returnId}/submit`);
-      // Refresh returns view
       const res = await api.get(`/tax/returns?userId=${selectedClient.UserID}`);
       setClientReturns(res.data.taxReturns);
       alert('Filing successfully submitted on client behalf.');

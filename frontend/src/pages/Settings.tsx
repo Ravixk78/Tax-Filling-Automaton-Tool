@@ -14,13 +14,11 @@ import {
 export const Settings: React.FC = () => {
   const { user, refreshProfile } = useAuth();
 
-  // Form states
   const [name, setName] = useState<string>(user?.Name || '');
   const [phone, setPhone] = useState<string>(user?.PhoneNumber || '');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
-  // UI state
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
