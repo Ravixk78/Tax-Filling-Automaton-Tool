@@ -215,7 +215,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Income</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Rs{totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-emerald-50 text-primary border border-emerald-100 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -231,7 +231,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Expenses</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Rs{totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-rose-50 text-danger border border-rose-100 rounded-xl group-hover:bg-danger group-hover:text-white transition-colors duration-300">
@@ -247,7 +247,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Taxable Income</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${taxableIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Rs{taxableIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-emerald-50 text-success border border-emerald-100 rounded-xl group-hover:bg-success group-hover:text-white transition-colors duration-300">
@@ -263,7 +263,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Estimated Tax</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${estimatedTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Rs{estimatedTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-amber-50 text-warning border border-amber-100 rounded-xl group-hover:bg-warning group-hover:text-white transition-colors duration-300">
@@ -402,7 +402,7 @@ export const Dashboard: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-500 uppercase">Amount ($)</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase">Amount (Rs)</label>
                   <input 
                     type="number" 
                     value={incAmount}
@@ -463,7 +463,7 @@ export const Dashboard: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-500 uppercase">Amount ($)</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase">Amount (Rs)</label>
                   <input 
                     type="number" 
                     value={expAmount}

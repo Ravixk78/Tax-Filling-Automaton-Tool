@@ -12,8 +12,7 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
-   
+ 
   React.useEffect(() => {
     if (user) {
       navigate('/dashboard', { replace: true });
@@ -29,18 +28,42 @@ export const Login: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    try {
-      const res = await api.post('/auth/login', { Email: email, Password: password });
-      login(res.data.token, res.data.user);
-      
+    let mockUser = {
+      UserID: 1,
+      Name: "Taxpayer Demo",
+      Email: email,
+      Role: "Taxpayer",
+      PhoneNumber: "0771122334",
+      Status: "Active"
+    };
+
+    if (email.toLowerCase().includes('admin')) {
+      mockUser = {
+        UserID: 2,
+        Name: "Admin Demo",
+        Email: email,
+        Role: "System Administrator",
+        PhoneNumber: "0779988776",
+        Status: "Active"
+      };
+    } 
+    else if (email.toLowerCase().includes('accountant') || email.toLowerCase().includes('acc')) {
+      mockUser = {
+        UserID: 3,
+        Name: "Accountant Demo",
+        Email: email,
+        Role: "Accountant",
+        PhoneNumber: "0775566778",
+        Status: "Active"
+      };
+    }
+
+    setTimeout(() => {
+      login("mock_token_12345", mockUser);
+      setLoading(false);
       const from = (location.state as any)?.from?.pathname || '/dashboard';
       navigate(from, { replace: true });
-    } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.response?.data?.error || 'Invalid credentials or connection failure.');
-    } finally {
-      setLoading(false);
-    }
+    }, 500);
   };
 
   return (

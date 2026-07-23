@@ -92,7 +92,7 @@ export const Income: React.FC = () => {
       IncomeDate: new Date(date).toISOString()
     };
 
-    try {
+    try { 
       if (editingId) {
         await api.put(`/income/${editingId}`, payload);
       } else {

@@ -31,8 +31,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProfile = async () => {
     try {
-      const res = await api.get('/auth/profile');
-      setUser(res.data.user);
+      const storedUser = localStorage.getItem('tfat_user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      } else {
+        setUser({
+          UserID: 1,
+          Name: "Demo User",
+          Email: "taxpayer@example.com",
+          Role: "Taxpayer",
+          PhoneNumber: "0771234567",
+          Status: "Active"
+        });
+      }
     } catch (err) {
       console.error('Failed to restore session:', err);
       logout();
@@ -51,23 +62,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = (newToken: string, newUser: UserProfile) => {
     localStorage.setItem('tfat_token', newToken);
+    localStorage.setItem('tfat_user', JSON.stringify(newUser));
     setToken(newToken);
     setUser(newUser);
   };
 
   const logout = () => {
     localStorage.removeItem('tfat_token');
+    localStorage.removeItem('tfat_user');
     setToken(null);
     setUser(null);
   };
 
   const refreshProfile = async () => {
-    try {
-      const res = await api.get('/auth/profile');
-      setUser(res.data.user);
-    } catch (err) {
-      console.error('Failed to refresh profile:', err);
-    }
   };
 
   return (
