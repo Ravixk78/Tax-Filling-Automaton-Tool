@@ -1,13 +1,229 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
-generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-}
-
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  UserID       Int             @id @default(autoincrement())
+  Name         String
+  Email        String          @unique
+  PasswordHash String
+  PhoneNumber  String
+  Role         String          // e.g. "Individual Taxpayer", "Freelancer", "Small Business Owner", "Accountant", "System Administrator"
+  Status       String          @default("Active") // e.g. "Active", "Suspended"
+  CreatedDate  DateTime        @default(now())
+  LastLogin    DateTime?
+  
+  Incomes        Income[]
+  Expenses       Expense[]
+  TaxDeductions  TaxDeduction[]
+  TaxCredits     TaxCredit[]
+  TaxReturns     TaxReturn[]
+  Notifications  Notification[]
+  AuditLogs      AuditLog[]
+  ClientAccounts ClientAccount[]
+  BankStatements BankStatement[]
+  AuditRisks     AuditRisk[]
+}
+
+model Accountant {
+  AccountantID  Int             @id @default(autoincrement())
+  Name          String
+  Email         String          @unique
+  PhoneNumber   String
+  LicenseNumber String          @unique
+  
+  ClientAccounts ClientAccount[]
+}
+
+model ClientAccount {
+  ClientAccountID Int        @id @default(autoincrement())
+  AccountantID    Int
+  UserID          Int
+  AssignedDate    DateTime   @default(now())
+  
+  Accountant Accountant @relation(fields: [AccountantID], references: [AccountantID], onDelete: Cascade)
+  User       User       @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+}
+
+model Income {
+  IncomeID    Int      @id @default(autoincrement())
+  UserID      Int
+  Source      String
+  Amount      Decimal  @db.Decimal(10, 2)
+  IncomeType  String   // e.g. "Salary", "Freelance", "Business", "Investment", "Other"
+  Description String?  @db.Text
+  IncomeDate  DateTime
+  
+  User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+}
+
+model ExpenseCategory {
+  CategoryID   Int       @id @default(autoincrement())
+  CategoryName String    @unique
+  Description  String?   @db.Text
+  
+  Expenses Expense[]
+}
+
+model Expense {
+  ExpenseID   Int      @id @default(autoincrement())
+  UserID      Int
+  CategoryID  Int
+  Amount      Decimal  @db.Decimal(10, 2)
+  Description String?  @db.Text
+  ExpenseDate DateTime
+  
+  User     User            @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+  Category ExpenseCategory @relation(fields: [CategoryID], references: [CategoryID], onDelete: Cascade)
+  Receipt  Receipt?
+}
+
+model Receipt {
+  ReceiptID  Int      @id @default(autoincrement())
+  ExpenseID  Int      @unique
+  FileName   String
+  FilePath   String
+  UploadDate DateTime @default(now())
+  
+  Expense     Expense      @relation(fields: [ExpenseID], references: [ExpenseID], onDelete: Cascade)
+  OcrMetadata OcrMetadata?
+}
+
+model OcrMetadata {
+  OcrID             Int      @id @default(autoincrement())
+  ReceiptID         Int      @unique
+  ExtractedMerchant String?
+  ExtractedAmount   Decimal? @db.Decimal(10, 2)
+  ExtractedDate     DateTime?
+  AutoCategory      String?
+  ConfidenceScore   Decimal? @db.Decimal(5, 2)
+  RawText           String?  @db.Text
+  
+  Receipt Receipt @relation(fields: [ReceiptID], references: [ReceiptID], onDelete: Cascade)
+}
+
+model BankStatement {
+  StatementID       Int               @id @default(autoincrement())
+  UserID            Int
+  FileName          String
+  BankName          String?
+  UploadDate        DateTime          @default(now())
+  TotalTransactions Int               @default(0)
+  
+  User         User              @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+  Transactions BankTransaction[]
+}
+
+model BankTransaction {
+  TransactionID   Int      @id @default(autoincrement())
+  StatementID     Int
+  TransactionDate DateTime
+  Description     String
+  Amount          Decimal  @db.Decimal(10, 2)
+  Type            String   // "INCOME" or "EXPENSE"
+  Category        String?
+  SyncStatus      String   @default("SYNCED") // "SYNCED", "PENDING"
+  
+  BankStatement BankStatement @relation(fields: [StatementID], references: [StatementID], onDelete: Cascade)
+}
+
+model TaxRule {
+  RuleID        Int      @id @default(autoincrement())
+  RuleName      String
+  Description   String?  @db.Text
+  EffectiveDate DateTime
+  TaxRate       Decimal  @db.Decimal(5, 2)
+  
+  TaxReturns TaxReturn[]
+}
+
+model TaxDeduction {
+  DeductionID    Int      @id @default(autoincrement())
+  UserID         Int
+  DeductionType  String   // e.g. "Standard", "Medical", "Education", "Charity", "Other"
+  Amount         Decimal  @db.Decimal(10, 2)
+  Description    String?  @db.Text
+  ApplicableYear Int
+  
+  User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+}
+
+model TaxCredit {
+  CreditID       Int      @id @default(autoincrement())
+  UserID         Int
+  CreditType     String   // e.g. "ChildCare", "Education", "Energy", "Other"
+  Amount         Decimal  @db.Decimal(10, 2)
+  Description    String?  @db.Text
+  ApplicableYear Int
+  
+  User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+}
+
+model TaxReturn {
+  ReturnID        Int       @id @default(autoincrement())
+  UserID          Int
+  RuleID          Int
+  TaxYear         Int
+  TotalIncome     Decimal   @db.Decimal(10, 2)
+  TotalExpense    Decimal   @db.Decimal(10, 2)
+  TotalDeductions Decimal   @db.Decimal(10, 2) @default(0)
+  TaxableIncome   Decimal   @db.Decimal(10, 2)
+  TaxAmount       Decimal   @db.Decimal(10, 2)
+  Status          String    @default("Pending") // e.g. "Pending", "Filed", "Approved", "Rejected"
+  SubmissionDate  DateTime?
+  
+  User            User            @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+  TaxRule         TaxRule         @relation(fields: [RuleID], references: [RuleID], onDelete: Cascade)
+  FilingHistories  FilingHistory[]
+  AuditRisks      AuditRisk[]
+}
+
+model AuditRisk {
+  RiskID               Int      @id @default(autoincrement())
+  UserID               Int
+  ReturnID             Int?
+  RiskScore            String   // "LOW", "MEDIUM", "HIGH"
+  ScoreValue           Decimal  @db.Decimal(5, 2) // e.g. 15.5, 45.0, 82.5
+  AnomalyFlags         String   @db.Text // JSON encoded array of anomaly strings
+  IRDComplianceStatus  String   // e.g. "Compliant", "Under Review", "High Audit Probability"
+  EvaluatedAt          DateTime @default(now())
+  
+  User      User       @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+  TaxReturn TaxReturn? @relation(fields: [ReturnID], references: [ReturnID], onDelete: Cascade)
+}
+
+model FilingHistory {
+  FilingID   Int      @id @default(autoincrement())
+  ReturnID   Int
+  ActionType String   // e.g. "Created", "Submitted", "Approved", "Rejected"
+  ActionDate DateTime @default(now())
+  Remarks    String?  @db.Text
+  
+  TaxReturn TaxReturn @relation(fields: [ReturnID], references: [ReturnID], onDelete: Cascade)
+}
+
+model Notification {
+  NotificationID Int      @id @default(autoincrement())
+  UserID         Int
+  Message        String   @db.Text
+  Type           String   // e.g. "Deadline", "FilingStatus", "Alert", "General"
+  Status         String   @default("Unread") // e.g. "Unread", "Read"
+  SentDate       DateTime @default(now())
+  
+  User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
+}
+
+model AuditLog {
+  LogID     Int      @id @default(autoincrement())
+  UserID    Int
+  Activity  String   @db.Text
+  Timestamp DateTime @default(now())
+  IPAddress String
+  
+  User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
 }
