@@ -211,7 +211,7 @@ model Notification {
   NotificationID Int      @id @default(autoincrement())
   UserID         Int
   Message        String   @db.Text
-  Type           String   // e.g. "Deadline", "FilingStatus", "Alert", "General"
+   Type           String   // e.g. "Deadline", "FilingStatus", "Alert", "General"
   Status         String   @default("Unread") // e.g. "Unread", "Read"
   SentDate       DateTime @default(now())
   
