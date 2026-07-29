@@ -218,7 +218,7 @@ model Notification {
   User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
 }
 
-model AuditLog {
+ model AuditLog {
   LogID     Int      @id @default(autoincrement())
   UserID    Int
   Activity  String   @db.Text
