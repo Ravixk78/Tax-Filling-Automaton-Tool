@@ -164,7 +164,7 @@ model TaxDeduction {
   User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)
 }
 
-model TaxReturn {
+ model TaxReturn {
   ReturnID        Int       @id @default(autoincrement())
   UserID          Int
   RuleID          Int
