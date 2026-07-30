@@ -701,7 +701,7 @@ export class PrismaAutomationRepository implements IAutomationRepository {
         ExtractedDate: data.ExtractedDate,
         AutoCategory: data.AutoCategory,
         ConfidenceScore: data.ConfidenceScore,
-        RawText: data.RawText
+         RawText: data.RawText
       }
     });
     return {

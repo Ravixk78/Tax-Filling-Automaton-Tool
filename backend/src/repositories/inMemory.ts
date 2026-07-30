@@ -23,7 +23,7 @@ import {
   IExpenseRepository,
   ITaxRepository,
   INotificationRepository,
-  IAuditLogRepository,
+   IAuditLogRepository,
   IAutomationRepository
 } from './types';
 
