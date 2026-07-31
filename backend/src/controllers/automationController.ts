@@ -762,7 +762,7 @@ export class PrismaAutomationRepository implements IAutomationRepository {
     };
   }
 
-  async saveAuditRisk(data: Omit<AuditRisk, 'RiskID' | 'EvaluatedAt'>): Promise<AuditRisk> {
+   async saveAuditRisk(data: Omit<AuditRisk, 'RiskID' | 'EvaluatedAt'>): Promise<AuditRisk> {
     const res = await prisma.auditRisk.create({
       data: {
         UserID: data.UserID,
