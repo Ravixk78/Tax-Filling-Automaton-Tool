@@ -773,7 +773,7 @@ export class PrismaAutomationRepository implements IAutomationRepository {
         IRDComplianceStatus: data.IRDComplianceStatus
       }
     });
-    return {
+     return {
       RiskID: res.RiskID,
       UserID: res.UserID,
       ReturnID: res.ReturnID,
