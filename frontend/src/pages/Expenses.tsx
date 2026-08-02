@@ -15,13 +15,19 @@ import {
   AlertCircle,
   Receipt
 } from 'lucide-react';
+import { OCRScannerModal } from '../components/OCRScannerModal';
 
 export const Expenses: React.FC = () => {
+  // State
   const [expenses, setExpenses] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
   const [catFilter, setCatFilter] = useState<string>('');
 
+  // OCR Modal state
+  const [isOcrOpen, setIsOcrOpen] = useState<boolean>(false);
+
+  // CRUD Modals state
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [desc, setDesc] = useState<string>('');
@@ -29,12 +35,14 @@ export const Expenses: React.FC = () => {
   const [categoryId, setCategoryId] = useState<string>('');
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
+  // Upload Receipt state
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
   const [selectedExpenseId, setSelectedExpenseId] = useState<number | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
 
+  // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recordsPerPage = 5;
 
@@ -115,6 +123,7 @@ export const Expenses: React.FC = () => {
     }
   };
 
+  // Receipt upload handling
   const handleOpenUpload = (expenseId: number) => {
     setSelectedExpenseId(expenseId);
     setSelectedFile(null);
@@ -166,11 +175,13 @@ export const Expenses: React.FC = () => {
     }
   };
 
+  // Pagination calculation
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = expenses.slice(indexOfFirstRecord, indexOfLastRecord);
   const totalPages = Math.ceil(expenses.length / recordsPerPage) || 1;
 
+  // Find Category Name by ID helper
   const getCategoryName = (catId: number) => {
     const cat = categories.find(c => c.CategoryID === catId);
     return cat ? cat.CategoryName : 'Other';
@@ -185,13 +196,22 @@ export const Expenses: React.FC = () => {
           <h1 className="text-3xl font-heading font-bold text-slate-900">Expenses</h1>
           <div className="w-12 h-1 bg-primary mt-2 rounded"></div>
         </div>
-        <button
-          onClick={handleOpenAdd}
-          className="px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark active:scale-95 transition-all flex items-center gap-2 text-sm shadow-sm"
-        >
-          <Plus className="h-4.5 w-4.5" />
-          <span>Add Expense</span>
-        </button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setIsOcrOpen(true)}
+            className="px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-2 text-sm shadow-sm"
+          >
+            <Receipt className="h-4.5 w-4.5" />
+            <span>Smart OCR Scan</span>
+          </button>
+          <button
+            onClick={handleOpenAdd}
+            className="px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark active:scale-95 transition-all flex items-center gap-2 text-sm shadow-sm"
+          >
+            <Plus className="h-4.5 w-4.5" />
+            <span>Add Expense</span>
+          </button>
+        </div>
       </div>
 
       {/* Filters Card */}
@@ -515,6 +535,12 @@ export const Expenses: React.FC = () => {
           </div>
         </div>
       )}
+
+      <OCRScannerModal
+        isOpen={isOcrOpen}
+        onClose={() => setIsOcrOpen(false)}
+        onSuccess={fetchExpensesAndCategories}
+      />
 
     </div>
   );
