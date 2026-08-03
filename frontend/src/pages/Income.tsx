@@ -13,16 +13,20 @@ import {
   DollarSign
 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { BankStatementIngestModal } from '../components/BankStatementIngestModal';
 
 export const Income: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const initialSearch = queryParams.get('search') || '';
 
+  // State
   const [incomes, setIncomes] = useState<any[]>([]);
   const [search, setSearch] = useState<string>(initialSearch);
   const [typeFilter, setTypeFilter] = useState<string>('');
+  const [isBankModalOpen, setIsBankModalOpen] = useState<boolean>(false);
   
+  // Modal state
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [source, setSource] = useState<string>('');
@@ -31,6 +35,7 @@ export const Income: React.FC = () => {
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [description, setDescription] = useState<string>('');
 
+  // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recordsPerPage = 5;
 
@@ -92,7 +97,7 @@ export const Income: React.FC = () => {
       IncomeDate: new Date(date).toISOString()
     };
 
-    try { 
+    try {
       if (editingId) {
         await api.put(`/income/${editingId}`, payload);
       } else {
@@ -105,6 +110,7 @@ export const Income: React.FC = () => {
     }
   };
 
+  // Pagination calculation
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = incomes.slice(indexOfFirstRecord, indexOfLastRecord);
@@ -119,13 +125,22 @@ export const Income: React.FC = () => {
           <h1 className="text-3xl font-heading font-bold text-slate-900">Income Management</h1>
           <div className="w-12 h-1 bg-primary mt-2 rounded"></div>
         </div>
-        <button
-          onClick={handleOpenAdd}
-          className="px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark active:scale-95 transition-all flex items-center gap-2 text-sm shadow-sm"
-        >
-          <Plus className="h-4.5 w-4.5" />
-          <span>Add Income</span>
-        </button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setIsBankModalOpen(true)}
+            className="px-4 py-2.5 bg-sky-600 text-white font-semibold rounded-lg hover:bg-sky-700 active:scale-95 transition-all flex items-center gap-2 text-sm shadow-sm"
+          >
+            <TrendingUp className="h-4.5 w-4.5" />
+            <span>Auto Ingest Bank Statement</span>
+          </button>
+          <button
+            onClick={handleOpenAdd}
+            className="px-5 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark active:scale-95 transition-all flex items-center gap-2 text-sm shadow-sm"
+          >
+            <Plus className="h-4.5 w-4.5" />
+            <span>Add Income</span>
+          </button>
+        </div>
       </div>
 
       {/* Filters Card */}
@@ -371,6 +386,12 @@ export const Income: React.FC = () => {
           </div>
         </div>
       )}
+
+      <BankStatementIngestModal
+        isOpen={isBankModalOpen}
+        onClose={() => setIsBankModalOpen(false)}
+        onSuccess={fetchIncomes}
+      />
 
     </div>
   );
