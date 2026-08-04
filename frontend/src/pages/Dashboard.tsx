@@ -13,6 +13,9 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuditRiskCard } from '../components/AuditRiskCard';
+
+// Chart.js Setup
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -44,9 +47,11 @@ export const Dashboard: React.FC = () => {
   const [pendingDocsCount, setPendingDocsCount] = useState<number>(0);
   const [chartDataState, setChartDataState] = useState<any>(null);
   
+  // Modals state
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
 
+  // Quick form state
   const [incSource, setIncSource] = useState('');
   const [incAmount, setIncAmount] = useState('');
   const [incType, setIncType] = useState('Freelance');
@@ -60,30 +65,36 @@ export const Dashboard: React.FC = () => {
     try {
       const year = new Date().getFullYear();
 
+      // Fetch Income
       const incomeRes = await api.get('/income');
       const incomes = incomeRes.data.incomes;
       const sumIncome = incomes.reduce((sum: number, i: any) => sum + i.Amount, 0);
       setTotalIncome(sumIncome);
 
+      // Fetch Expenses
       const expenseRes = await api.get('/expenses');
       const expensesList = expenseRes.data.expenses;
       const sumExpense = expensesList.reduce((sum: number, e: any) => sum + e.Amount, 0);
       setTotalExpense(sumExpense);
 
+      // Fetch Categories
       const catRes = await api.get('/expenses/categories');
       setCategories(catRes.data.categories);
       if (catRes.data.categories.length > 0) {
         setExpCategory(catRes.data.categories[0].CategoryID);
       }
 
+      // Count expenses lacking receipts
       const withoutReceipt = expensesList.filter((e: any) => !e.Receipt).length;
       setPendingDocsCount(withoutReceipt);
 
+      // Fetch Tax Calculations
       const taxRes = await api.get(`/tax/calculate?year=${year}`);
       const calc = taxRes.data.calculation;
       setTaxableIncome(calc.taxableIncome);
       setEstimatedTax(calc.taxAmount);
 
+      // Fetch Audit Logs for activities
       const logsRes = await api.get('/admin/logs').catch(() => null);
       if (logsRes) {
         setRecentActivities(logsRes.data.auditLogs.slice(0, 4));
@@ -95,6 +106,7 @@ export const Dashboard: React.FC = () => {
         ]);
       }
 
+      // Setup Bar Chart data (rounded bars)
       setChartDataState({
         labels: ['Q1 Financials', 'Q2 Financials', 'Q3 Financials', 'Q4 Financials'],
         datasets: [
@@ -206,6 +218,9 @@ export const Dashboard: React.FC = () => {
         </button>
       </div>
 
+      {/* Automated Audit Risk Engine Widget */}
+      <AuditRiskCard />
+
       {/* Premium Bento Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
@@ -215,7 +230,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Income</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                Rs{totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                ${totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-emerald-50 text-primary border border-emerald-100 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -231,7 +246,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Expenses</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                Rs{totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                ${totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-rose-50 text-danger border border-rose-100 rounded-xl group-hover:bg-danger group-hover:text-white transition-colors duration-300">
@@ -247,7 +262,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Taxable Income</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                Rs{taxableIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                ${taxableIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-emerald-50 text-success border border-emerald-100 rounded-xl group-hover:bg-success group-hover:text-white transition-colors duration-300">
@@ -263,7 +278,7 @@ export const Dashboard: React.FC = () => {
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Estimated Tax</span>
               <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                Rs{estimatedTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                ${estimatedTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-amber-50 text-warning border border-amber-100 rounded-xl group-hover:bg-warning group-hover:text-white transition-colors duration-300">
@@ -402,7 +417,7 @@ export const Dashboard: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-500 uppercase">Amount (Rs)</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase">Amount ($)</label>
                   <input 
                     type="number" 
                     value={incAmount}
@@ -463,7 +478,7 @@ export const Dashboard: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-500 uppercase">Amount (Rs)</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase">Amount ($)</label>
                   <input 
                     type="number" 
                     value={expAmount}
