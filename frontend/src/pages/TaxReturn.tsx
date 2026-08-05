@@ -15,12 +15,14 @@ import {
   History,
   AlertCircle
 } from 'lucide-react';
+import { AuditRiskCard } from '../components/AuditRiskCard';
 
 export const TaxReturn: React.FC = () => {
   const { user } = useAuth();
   const [step, setStep] = useState<number>(1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   
+  // Data State
   const [incomeSum, setIncomeSum] = useState<number>(0);
   const [expenseSum, setExpenseSum] = useState<number>(0);
   const [deductionsList, setDeductionsList] = useState<any[]>([]);
@@ -36,25 +38,30 @@ export const TaxReturn: React.FC = () => {
     if (!user) return;
     try {
       setLoading(true);
+      // Fetch Income sum
       const incRes = await api.get('/income');
       const yearIncomes = incRes.data.incomes.filter((i: any) => new Date(i.IncomeDate).getFullYear() === year);
       setIncomeSum(yearIncomes.reduce((sum: number, item: any) => sum + item.Amount, 0));
 
+      // Fetch Expense sum
       const expRes = await api.get('/expenses');
       const yearExpenses = expRes.data.expenses.filter((e: any) => new Date(e.ExpenseDate).getFullYear() === year);
       setExpenseSum(yearExpenses.reduce((sum: number, item: any) => sum + item.Amount, 0));
 
+      // Fetch Deductions & Credits
       const dedRes = await api.get(`/tax/deductions?year=${year}`);
       setDeductionsList(dedRes.data.deductions);
       const credRes = await api.get(`/tax/credits?year=${year}`);
       setCreditsList(credRes.data.credits);
 
+      // Check if tax return already generated
       const retRes = await api.get(`/tax/returns?userId=${user.UserID}`);
       const returns = retRes.data.taxReturns;
       const currentReturn = returns.find((r: any) => r.TaxYear === year);
 
       if (currentReturn) {
         setActiveReturn(currentReturn);
+        // Load filing history
         const histRes = await api.get(`/tax/returns/${currentReturn.ReturnID}`);
         setFilingHistory(histRes.data.history);
       } else {
@@ -77,7 +84,7 @@ export const TaxReturn: React.FC = () => {
       setLoading(true);
       const res = await api.get(`/tax/calculate?year=${year}`);
       setTaxDetails(res.data.calculation);
-      setStep(2);  
+      setStep(2); // Advance to rule application and calculation step
     } catch (err) {
       alert('Tax calculation engine failure.');
     } finally {
@@ -92,10 +99,11 @@ export const TaxReturn: React.FC = () => {
       setActiveReturn(res.data.taxReturn);
       setMessage('Draft tax return generated and stored successfully!');
       
+      // Load history
       const histRes = await api.get(`/tax/returns/${res.data.taxReturn.ReturnID}`);
       setFilingHistory(histRes.data.history);
       
-      setStep(3);  
+      setStep(3); // Advance to preview and submit
     } catch (err) {
       alert('Return generation failure.');
     } finally {
@@ -111,10 +119,11 @@ export const TaxReturn: React.FC = () => {
       setActiveReturn(res.data.taxReturn);
       setMessage('Filing submitted to Tax Authority successfully!');
       
+      // Reload history
       const histRes = await api.get(`/tax/returns/${activeReturn.ReturnID}`);
       setFilingHistory(histRes.data.history);
       
-      setStep(4);  
+      setStep(4); // Filing complete
     } catch (err) {
       alert('Filing submission failed.');
     } finally {
@@ -123,6 +132,7 @@ export const TaxReturn: React.FC = () => {
   };
 
   const handleDownloadPDF = () => {
+    // Print document mock
     window.print();
   };
 
@@ -137,6 +147,9 @@ export const TaxReturn: React.FC = () => {
         <h1 className="text-3xl font-heading font-bold text-slate-900">Tax Return Filing</h1>
         <div className="w-12 h-1 bg-primary mt-2 rounded"></div>
       </div>
+
+      {/* Audit Risk Engine Evaluation Widget */}
+      <AuditRiskCard />
 
       {/* Step Progress Tracker Indicator */}
       <div className="bg-white p-4 border border-border shadow-sm rounded-xl">
