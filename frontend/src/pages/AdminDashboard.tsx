@@ -21,9 +21,14 @@ import {
 } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
+  // Tabs: 'Users', 'Rules', 'Health', 'Audit'
   const [activeTab, setActiveTab] = useState<string>('Users');
+
+  // Users State
   const [users, setUsers] = useState<any[]>([]);
   const [searchUser, setSearchUser] = useState<string>('');
+
+  // Rules State
   const [rules, setRules] = useState<any[]>([]);
   const [isRuleOpen, setIsRuleOpen] = useState<boolean>(false);
   const [editingRuleId, setEditingRuleId] = useState<number | null>(null);
@@ -32,11 +37,11 @@ export const AdminDashboard: React.FC = () => {
   const [ruleRate, setRuleRate] = useState<string>('');
   const [ruleDate, setRuleDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
-
+  // Audit State
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [searchAudit, setSearchAudit] = useState<string>('');
 
-  
+  // Health State
   const [systemHealth, setSystemHealth] = useState<any>(null);
 
   const fetchUsers = async () => {
@@ -75,6 +80,7 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
+  // Poll system health every 10s
   useEffect(() => {
     fetchUsers();
     fetchRules();
@@ -154,6 +160,7 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
+  // Filter lists
   const filteredUsers = users.filter(u => 
     u.Name.toLowerCase().includes(searchUser.toLowerCase()) || 
     u.Email.toLowerCase().includes(searchUser.toLowerCase()) ||
