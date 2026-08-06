@@ -200,7 +200,7 @@ export interface IIncomeRepository {
   listByUser(userId: number, search?: string, type?: string): Promise<Income[]>;
 }
 
- export interface IExpenseRepository {
+export interface IExpenseRepository {
   createCategory(data: Omit<ExpenseCategory, 'CategoryID'>): Promise<ExpenseCategory>;
   listCategories(): Promise<ExpenseCategory[]>;
   create(data: Omit<Expense, 'ExpenseID' | 'Receipt'>): Promise<Expense>;
