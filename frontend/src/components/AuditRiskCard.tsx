@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAuditRiskEvaluation, AuditRiskData } from '../services/automationService';
+import { getAuditRiskEvaluation, type AuditRiskData } from '../services/automationService';
 
 export const AuditRiskCard: React.FC<{ userId?: number }> = ({ userId }) => {
   const [data, setData] = useState<AuditRiskData | null>(null);

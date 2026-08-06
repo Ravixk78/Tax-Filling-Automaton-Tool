@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { scanReceiptOCR, OCRScanResult } from '../services/automationService';
+import { scanReceiptOCR, type OCRScanResult } from '../services/automationService';
 
 interface OCRScannerModalProps {
   isOpen: boolean;

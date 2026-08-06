@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ingestBankStatement, BankIngestResult } from '../services/automationService';
+import { ingestBankStatement, type BankIngestResult } from '../services/automationService';
 
 interface BankStatementIngestModalProps {
   isOpen: boolean;

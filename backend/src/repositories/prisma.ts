@@ -693,7 +693,7 @@ export class PrismaAuditLogRepository implements IAuditLogRepository {
 
 export class PrismaAutomationRepository implements IAutomationRepository {
   async saveOcrMetadata(data: Omit<OcrMetadata, 'OcrID'>): Promise<OcrMetadata> {
-    const res = await prisma.ocrMetadata.create({
+    const res = await (prisma as any).ocrMetadata.create({
       data: {
         ReceiptID: data.ReceiptID,
         ExtractedMerchant: data.ExtractedMerchant,
@@ -720,7 +720,7 @@ export class PrismaAutomationRepository implements IAutomationRepository {
     statementData: Omit<BankStatement, 'StatementID' | 'UploadDate'>,
     transactionsData: Omit<BankTransaction, 'TransactionID' | 'StatementID'>[]
   ): Promise<{ statement: BankStatement; transactions: BankTransaction[] }> {
-    const stmtRes = await prisma.bankStatement.create({
+    const stmtRes = await (prisma as any).bankStatement.create({
       data: {
         UserID: statementData.UserID,
         FileName: statementData.FileName,
@@ -763,7 +763,7 @@ export class PrismaAutomationRepository implements IAutomationRepository {
   }
 
   async saveAuditRisk(data: Omit<AuditRisk, 'RiskID' | 'EvaluatedAt'>): Promise<AuditRisk> {
-    const res = await prisma.auditRisk.create({
+    const res = await (prisma as any).auditRisk.create({
       data: {
         UserID: data.UserID,
         ReturnID: data.ReturnID,
@@ -786,7 +786,7 @@ export class PrismaAutomationRepository implements IAutomationRepository {
   }
 
   async getLatestAuditRisk(userId: number): Promise<AuditRisk | null> {
-    const res = await prisma.auditRisk.findFirst({
+    const res = await (prisma as any).auditRisk.findFirst({
       where: { UserID: userId },
       orderBy: { EvaluatedAt: 'desc' }
     });
