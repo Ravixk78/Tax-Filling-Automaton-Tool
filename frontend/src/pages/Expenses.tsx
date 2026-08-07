@@ -15,9 +15,12 @@ import {
   AlertCircle,
   Receipt
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { OCRScannerModal } from '../components/OCRScannerModal';
 
 export const Expenses: React.FC = () => {
+  const navigate = useNavigate();
+
   // State
   const [expenses, setExpenses] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
@@ -67,14 +70,7 @@ export const Expenses: React.FC = () => {
   }, [search, catFilter]);
 
   const handleOpenAdd = () => {
-    setEditingId(null);
-    setDesc('');
-    setAmount('');
-    if (categories.length > 0) {
-      setCategoryId(categories[0].CategoryID.toString());
-    }
-    setDate(new Date().toISOString().split('T')[0]);
-    setIsOpen(true);
+    navigate('/expenses/add');
   };
 
   const handleOpenEdit = (exp: any) => {
@@ -270,7 +266,7 @@ export const Expenses: React.FC = () => {
                   <tr key={item.ExpenseID} className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-4 px-6 font-semibold text-slate-900">{item.Description}</td>
                     <td className="py-4 px-6 font-mono text-danger font-bold">
-                      ${Number(item.Amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      LKR {Number(item.Amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-4 px-6">
                       <span className="bg-slate-100 border border-slate-200 px-2 py-0.5 rounded text-xs font-medium text-slate-600">

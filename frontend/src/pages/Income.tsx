@@ -12,11 +12,12 @@ import {
   Calendar,
   DollarSign
 } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { BankStatementIngestModal } from '../components/BankStatementIngestModal';
 
 export const Income: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const initialSearch = queryParams.get('search') || '';
 
@@ -53,13 +54,7 @@ export const Income: React.FC = () => {
   }, [search, typeFilter]);
 
   const handleOpenAdd = () => {
-    setEditingId(null);
-    setSource('');
-    setAmount('');
-    setType('Freelance');
-    setDate(new Date().toISOString().split('T')[0]);
-    setDescription('');
-    setIsOpen(true);
+    navigate('/income/add');
   };
 
   const handleOpenEdit = (income: any) => {
@@ -201,7 +196,7 @@ export const Income: React.FC = () => {
                   <tr key={item.IncomeID} className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-4 px-6 font-semibold text-slate-900">{item.Source}</td>
                     <td className="py-4 px-6 font-mono text-primary font-bold">
-                      ${Number(item.Amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      LKR {Number(item.Amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="py-4 px-6">
                       <span className="bg-slate-100 border border-slate-200 px-2 py-0.5 rounded text-xs font-medium text-slate-600">

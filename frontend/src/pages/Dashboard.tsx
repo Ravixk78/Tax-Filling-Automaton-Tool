@@ -202,20 +202,27 @@ export const Dashboard: React.FC = () => {
 
       {/* Action triggers */}
       <div className="flex flex-wrap gap-4">
-        <button 
-          onClick={() => setIsIncomeModalOpen(true)}
+        <Link 
+          to="/income/add"
           className="px-5 py-2.5 bg-gradient-to-r from-primary to-emerald-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-primary/25 hover:from-primary-dark active:scale-95 transition-all flex items-center gap-2 text-xs uppercase tracking-wider shadow-sm"
         >
           <Plus className="h-4 w-4" />
-          <span>Add New Income</span>
-        </button>
-        <button 
-          onClick={() => setIsExpenseModalOpen(true)}
+          <span>Add New Income (Full Page)</span>
+        </Link>
+        <Link 
+          to="/expenses/add"
           className="px-5 py-2.5 bg-white text-secondary border border-border/80 font-bold rounded-xl hover:bg-slate-50 active:scale-95 transition-all flex items-center gap-2 text-xs uppercase tracking-wider shadow-sm"
         >
           <Minus className="h-4 w-4" />
-          <span>Add New Expense</span>
-        </button>
+          <span>Add New Expense (Full Page)</span>
+        </Link>
+        <Link 
+          to="/automation"
+          className="px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 active:scale-95 transition-all flex items-center gap-2 text-xs uppercase tracking-wider shadow-sm"
+        >
+          <FileText className="h-4 w-4" />
+          <span>Automation Hub (3 Methods)</span>
+        </Link>
       </div>
 
       {/* Automated Audit Risk Engine Widget */}
@@ -229,8 +236,8 @@ export const Dashboard: React.FC = () => {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Income</span>
-              <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <span className="text-xl font-extrabold text-slate-900 block mt-2 font-mono">
+                LKR {totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-emerald-50 text-primary border border-emerald-100 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors duration-300">
@@ -245,8 +252,8 @@ export const Dashboard: React.FC = () => {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Total Expenses</span>
-              <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <span className="text-xl font-extrabold text-slate-900 block mt-2 font-mono">
+                LKR {totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-rose-50 text-danger border border-rose-100 rounded-xl group-hover:bg-danger group-hover:text-white transition-colors duration-300">
@@ -261,8 +268,8 @@ export const Dashboard: React.FC = () => {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Taxable Income</span>
-              <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${taxableIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <span className="text-xl font-extrabold text-slate-900 block mt-2 font-mono">
+                LKR {taxableIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-emerald-50 text-success border border-emerald-100 rounded-xl group-hover:bg-success group-hover:text-white transition-colors duration-300">
@@ -277,8 +284,8 @@ export const Dashboard: React.FC = () => {
           <div className="flex justify-between items-start">
             <div>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Estimated Tax</span>
-              <span className="text-2xl font-extrabold text-slate-900 block mt-2">
-                ${estimatedTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <span className="text-xl font-extrabold text-slate-900 block mt-2 font-mono">
+                LKR {estimatedTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
             <div className="p-3 bg-amber-50 text-warning border border-amber-100 rounded-xl group-hover:bg-warning group-hover:text-white transition-colors duration-300">
@@ -505,7 +512,8 @@ export const Dashboard: React.FC = () => {
                 type="submit" 
                 className="w-full h-11 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-all text-xs uppercase tracking-wider mt-4"
               >
-                Record Transaction
+                Record  Transaction
+                
               </button>
             </form>
           </div>

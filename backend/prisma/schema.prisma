@@ -222,7 +222,7 @@ model Notification {
   LogID     Int      @id @default(autoincrement())
   UserID    Int
   Activity  String   @db.Text
-  Timestamp DateTime @default((now))
+  Timestamp DateTime @default(now())
   IPAddress String
   
   User User @relation(fields: [UserID], references: [UserID], onDelete: Cascade)

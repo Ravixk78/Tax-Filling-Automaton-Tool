@@ -14,17 +14,14 @@ import {
   Users, 
   ShieldAlert, 
   Search,
-  ChevronDown
+  ChevronDown,
+  Bot
 } from 'lucide-react';
-export const ProtectedLayout: React.FC = () => {
-  // without db loggin
-  const { loading, logout } = useAuth();
-  
-  const user = { Name: "Ravindu Kushan", Role: "System Administrator", Email: "admin@example.com" };
 
+export const ProtectedLayout: React.FC = () => {
+  const { user, loading, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -56,12 +53,13 @@ export const ProtectedLayout: React.FC = () => {
     );
   }
 
-  //if (!user) {
-    //return <Navigate to="/login" replace state={{ from: location }} />;
- // }
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
 
   const sidebarLinks = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'Automation Hub', path: '/automation', icon: Bot },
     { name: 'Income', path: '/income', icon: CircleDollarSign },
     { name: 'Expenses', path: '/expenses', icon: Receipt },
     { name: 'Tax Return', path: '/tax/return', icon: Calculator },
