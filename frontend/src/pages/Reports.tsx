@@ -11,6 +11,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 
+// Chart.js Setup
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -65,6 +66,7 @@ export const Reports: React.FC = () => {
   const totalExpense = expenses.reduce((sum, e) => sum + e.Amount, 0);
   const netEarnings = totalIncome - totalExpense;
 
+  // Export CSV handler
   const handleExportCSV = () => {
     let csvContent = 'data:text/csv;charset=utf-8,';
     csvContent += 'Type,Source/Description,Amount,Date,Category/IncomeType\n';
@@ -91,6 +93,7 @@ export const Reports: React.FC = () => {
     window.print();
   };
 
+  // Chart setup: Category breakdown for Pie Chart
   const getCategoryBreakdown = () => {
     const breakdown: Record<string, number> = {};
     expenses.forEach(e => {
@@ -109,6 +112,7 @@ export const Reports: React.FC = () => {
     };
   };
 
+  // Chart setup: Income vs Expense Monthly for Bar Chart (Mock Months)
   const getCashFlowData = () => {
     return {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -167,7 +171,7 @@ export const Reports: React.FC = () => {
         <div className="bg-white p-6 border border-border shadow-sm rounded-xl flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Total Gross Income</span>
-            <span className="text-2xl font-bold text-slate-900 block mt-2">${totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+            <span className="text-xl font-bold font-mono text-slate-900 block mt-2">LKR {totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
           </div>
           <div className="p-3 bg-blue-50 text-primary rounded-full print:border">
             <TrendingUp className="h-6 w-6" />
@@ -177,7 +181,7 @@ export const Reports: React.FC = () => {
         <div className="bg-white p-6 border border-border shadow-sm rounded-xl flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Total Gross Expenses</span>
-            <span className="text-2xl font-bold text-slate-900 block mt-2">${totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+            <span className="text-xl font-bold font-mono text-slate-900 block mt-2">LKR {totalExpense.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
           </div>
           <div className="p-3 bg-red-50 text-danger rounded-full print:border">
             <TrendingDown className="h-6 w-6" />
@@ -187,8 +191,8 @@ export const Reports: React.FC = () => {
         <div className="bg-white p-6 border border-border shadow-sm rounded-xl flex items-center justify-between">
           <div>
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Net Financial Standing</span>
-            <span className={`text-2xl font-bold mt-2 block ${netEarnings >= 0 ? 'text-success' : 'text-danger'}`}>
-              ${netEarnings.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            <span className={`text-xl font-bold font-mono mt-2 block ${netEarnings >= 0 ? 'text-success' : 'text-danger'}`}>
+              LKR {netEarnings.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </span>
           </div>
           <div className={`p-3 rounded-full print:border ${netEarnings >= 0 ? 'bg-green-50 text-success' : 'bg-red-50 text-danger'}`}>
