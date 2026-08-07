@@ -202,7 +202,7 @@ export const TaxReturn: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-slate-400 uppercase">Gathered Income</div>
-                    <div className="text-xl font-bold text-slate-900">${incomeSum.toLocaleString()}</div>
+                    <div className="text-xl font-bold text-slate-900">LKR {incomeSum.toLocaleString()}</div>
                   </div>
                 </div>
 
@@ -212,7 +212,7 @@ export const TaxReturn: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-slate-400 uppercase">Gathered Expenses</div>
-                    <div className="text-xl font-bold text-slate-900">${expenseSum.toLocaleString()}</div>
+                    <div className="text-xl font-bold text-slate-900">LKR {expenseSum.toLocaleString()}</div>
                   </div>
                 </div>
               </div>
@@ -229,7 +229,7 @@ export const TaxReturn: React.FC = () => {
                       {deductionsList.map((d, index) => (
                         <li key={index} className="flex justify-between border-b border-slate-50 py-1.5 font-mono">
                           <span>{d.DeductionType}</span>
-                          <span className="font-semibold text-slate-800">${d.Amount}</span>
+                          <span className="font-semibold text-slate-800">LKR {d.Amount}</span>
                         </li>
                       ))}
                     </ul>
@@ -245,7 +245,7 @@ export const TaxReturn: React.FC = () => {
                       {creditsList.map((c, index) => (
                         <li key={index} className="flex justify-between border-b border-slate-50 py-1.5 font-mono">
                           <span>{c.CreditType}</span>
-                          <span className="font-semibold text-slate-800">${c.Amount}</span>
+                          <span className="font-semibold text-slate-800">LKR {c.Amount}</span>
                         </li>
                       ))}
                     </ul>
@@ -307,19 +307,19 @@ export const TaxReturn: React.FC = () => {
               
               <div className="flex justify-between border-b border-slate-100 py-1.5">
                 <span>Total Income (A)</span>
-                <span className="font-semibold text-slate-900">${taxDetails.totalIncome.toLocaleString()}</span>
+                <span className="font-semibold text-slate-900">LKR {taxDetails.totalIncome.toLocaleString()}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 py-1.5">
                 <span>Total Expenses (B)</span>
-                <span className="font-semibold text-red-600">-${taxDetails.totalExpense.toLocaleString()}</span>
+                <span className="font-semibold text-red-600">-LKR {taxDetails.totalExpense.toLocaleString()}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 py-1.5">
                 <span>Total Deductions (C)</span>
-                <span className="font-semibold text-red-600">-${taxDetails.totalDeductions.toLocaleString()}</span>
+                <span className="font-semibold text-red-600">-LKR {taxDetails.totalDeductions.toLocaleString()}</span>
               </div>
               <div className="flex justify-between border-b-2 border-slate-200 py-1.5 bg-slate-50 px-2 rounded">
                 <span className="font-semibold">Taxable Income (D = A - B - C)</span>
-                <span className="font-bold text-slate-900">${taxDetails.taxableIncome.toLocaleString()}</span>
+                <span className="font-bold text-slate-900">LKR {taxDetails.taxableIncome.toLocaleString()}</span>
               </div>
               <div className="flex justify-between border-b border-slate-100 py-1.5">
                 <span>Tax Rate Applicable</span>
@@ -327,7 +327,7 @@ export const TaxReturn: React.FC = () => {
               </div>
               <div className="flex justify-between border-b border-slate-100 py-1.5">
                 <span>Tax Credits (E)</span>
-                <span className="font-semibold text-green-600">-${taxDetails.totalCredits.toLocaleString()}</span>
+                <span className="font-semibold text-green-600">-LKR {taxDetails.totalCredits.toLocaleString()}</span>
               </div>
             </div>
 
@@ -335,7 +335,7 @@ export const TaxReturn: React.FC = () => {
             <div className="bg-slate-950 text-white rounded-xl p-6 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="text-xs uppercase text-slate-400 tracking-wider">Estimated Federal Tax Liability</div>
-                <div className="text-4xl font-bold font-sans">${taxDetails.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
+                <div className="text-4xl font-bold font-sans">LKR {taxDetails.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
               </div>
               
               <div className="text-xs text-slate-400 mt-6 leading-relaxed border-t border-slate-800 pt-4">
@@ -386,23 +386,23 @@ export const TaxReturn: React.FC = () => {
               <div className="space-y-2 font-mono text-sm">
                 <div className="flex justify-between py-1.5 border-b border-slate-200">
                   <span>Gross Income</span>
-                  <span className="font-semibold">${Number(activeReturn.TotalIncome).toLocaleString()}</span>
+                  <span className="font-semibold">LKR {Number(activeReturn.TotalIncome).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-slate-200">
                   <span>Gross Expenses</span>
-                  <span className="font-semibold">${Number(activeReturn.TotalExpense).toLocaleString()}</span>
+                  <span className="font-semibold">LKR {Number(activeReturn.TotalExpense).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-slate-200">
                   <span>Total Deductions</span>
-                  <span className="font-semibold">${Number(activeReturn.TotalDeductions).toLocaleString()}</span>
+                  <span className="font-semibold">LKR {Number(activeReturn.TotalDeductions).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-slate-200">
                   <span>Net Taxable Income</span>
-                  <span className="font-semibold">${Number(activeReturn.TaxableIncome).toLocaleString()}</span>
+                  <span className="font-semibold">LKR {Number(activeReturn.TaxableIncome).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between py-1.5 text-primary font-bold">
                   <span>Tax Payable</span>
-                  <span>${Number(activeReturn.TaxAmount).toLocaleString()}</span>
+                  <span>LKR {Number(activeReturn.TaxAmount).toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -459,7 +459,7 @@ export const TaxReturn: React.FC = () => {
               </div>
               <div className="flex justify-between py-1.5">
                 <span>Tax Liability</span>
-                <span className="font-bold text-primary">${Number(activeReturn.TaxAmount).toLocaleString()}</span>
+                <span className="font-bold text-primary">LKR {Number(activeReturn.TaxAmount).toLocaleString()}</span>
               </div>
             </div>
             
