@@ -48,9 +48,9 @@ export const AuditRiskCard: React.FC<{ userId?: number }> = ({ userId }) => {
         <div>
           <div className="flex items-center space-x-2">
             <span className="text-xl">🛡️</span>
-            <h3 className="font-bold text-base text-slate-800 dark:text-slate-100">Automated Audit Risk Engine</h3>
+            <h3 className="font-bold text-base text-slate-800 dark:text-slate-100">Automated IRD Rule-Based Audit Risk Engine</h3>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Inland Revenue Department (IRD) Anomaly Evaluation</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Inland Revenue Department (IRD) Rule-Based Anomaly & Threshold Evaluation</p>
         </div>
         <div className={`px-3 py-1 text-xs font-black uppercase rounded-full border shadow-sm ${scoreBadgeColor}`}>
           Audit Risk Score: {data.riskScore}
