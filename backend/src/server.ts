@@ -63,8 +63,17 @@ async function startServer() {
   initCronJobs();
 
   // 4. Start Listening
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`[Server] TFAT Backend running on http://localhost:${PORT}`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[Server Error] Port ${PORT} is currently in use by another process.`);
+      console.error(`[Server Error] Freeing port ${PORT} or restart backend command.`);
+    } else {
+      console.error('[Server Error]', err);
+    }
   });
 }
 
