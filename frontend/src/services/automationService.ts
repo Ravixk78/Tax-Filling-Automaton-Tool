@@ -36,8 +36,8 @@ export const scanReceiptOCR = async (fileName?: string, customMerchant?: string,
   return res.data.data;
 };
 
-export const ingestBankStatement = async (fileName?: string, bankName?: string): Promise<BankIngestResult> => {
-  const res = await api.post('/automation/bank-ingest', { fileName, bankName });
+export const ingestBankStatement = async (fileName?: string, bankName?: string, parsedTransactions?: any[]): Promise<BankIngestResult> => {
+  const res = await api.post('/automation/bank-ingest', { fileName, bankName, parsedTransactions });
   return res.data.data;
 };
 
